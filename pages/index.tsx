@@ -4,13 +4,14 @@ import Layout, { siteTitle } from "../components/layout"
 import Date from "../components/date"
 import utilStyles from "../styles/utils.module.css"
 import { getSortedPostsData } from "../lib/posts"
+import { GetStaticProps } from "next"
 
 // getStaticProps can only be exported from a page(js,ts,tsx,jsx in the page directory)
 
 // for server-side rendering use "getServerSideProps"
 // see: https://nextjs.org/learn/basics/data-fetching/request-time
 
-export async function getStaticProps() {
+export const  getStaticProps:GetStaticProps = async () => {
   const allPostsData = getSortedPostsData()
   return {
     props: {
@@ -19,7 +20,15 @@ export async function getStaticProps() {
   }
 }
 
-export default function Home({ allPostsData }) {
+export default function Home({
+  allPostsData
+}: {
+  allPostsData: {
+    date: string
+    title: string
+    id: string
+  }[]
+}) {
   return (
     <Layout home>
       <Head>
@@ -38,9 +47,9 @@ export default function Home({ allPostsData }) {
           {allPostsData.map(({ id, date, title }) => (
             <li className={utilStyles.listItem} key={id}>
               <Link href={`/posts/${id}`}>{title}</Link>
-              <br/>
+              <br />
               <small className={utilStyles.lightText}>
-                <Date dateString={date}/>
+                <Date dateString={date} />
               </small>
             </li>
           ))}
